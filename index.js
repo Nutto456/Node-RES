@@ -25,8 +25,8 @@ app.get('/books', (req, res) => {
     });
 });
 
-app.get('/books', (req, res) => {
-    db.all('SELECT * FROM books WHERE id = ?', req.params.id, (err, row) => {
+app.get('/books/:id', (req, res) => {
+    db.get('SELECT * FROM books WHERE id = ?', req.params.id, (err, row) => {
         if (err) {
             res.status(500).send(err);
         } else {
@@ -62,7 +62,7 @@ app.put('/books/:id', (req, res) => {
     });
 });
 
-app.delete('/book/:id', (req, res) => {
+app.delete('/books/:id', (req, res) => {
     db.run('DELETE FROM BOOKS WHERE id = ?', req.params.id, function(err) {
         if (err) {
             res.status(500).send(err);
