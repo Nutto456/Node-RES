@@ -13,36 +13,36 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 const Book = sequelize.define('book', {
     id: {
         type: Sequelize.INTEGER,
-        autoIncrement:true,
+        autoIncrement: true,
         primaryKey: true
-    },
+},
     title: {
         type: Sequelize.STRING,
         allowNull: false
-    },
-    author: {
+},
+    author:{
         type: Sequelize.STRING,
         allowNull: false
-    }
+}
 });
 
 sequelize.sync();
 
-app.get('/books', (req,res) => {
+app.get('/books', (req, res) => {
     Book.findAll().then(books => {
         res.json(books);
     }).catch(err => {
         res.status(500).send(err);
-    }); 
+    });
 });
 
 app.get('/books/:id', (req, res) => {
     Book.findByPk(req.params.id).then(book => {
-      if (!book) {
-        res.status(404).send('Book not found');
-      } else {
-        res.json(book);
-      }
+        if (!book) {
+            res.status(404).send('Book Not Found');
+        } else {    
+            res.json(book);
+        }
     }).catch(err => {
         res.status(500).send(err);
     });
@@ -59,8 +59,8 @@ app.post('/books', (req, res) => {
 app.put('/books/:id', (req, res) => {
     Book.findByPk(req.params.id).then(book => {
         if (!book) {
-            res.status(404).send('Book not found');
-        }else {
+            res.status(404).send('Book Not Found');
+        } else {
             book.update(req.body).then(() => {
                 res.send(book);
             }).catch(err => {
@@ -75,19 +75,21 @@ app.put('/books/:id', (req, res) => {
 app.delete('/books/:id', (req, res) => {
     Book.findByPk(req.params.id).then(book => {
         if (!book) {
-            res.status(404).send('Book not found');
+            res.status(404).send('Book Not Found');
         } else {
             book.destroy().then(() => {
-                res.send({});
+                res.send('Book Has Been Deleted');
             }).catch(err => {
                 res.status(500).send(err);
-            })
+            });
         }
-}).catch(err => {
+    }).catch(err => {
         res.status(500).send(err);
-});
+    });
 });
 
-//
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
+
+
+        
